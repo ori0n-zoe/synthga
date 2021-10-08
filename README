@@ -1,1 +1,8 @@
-this is the README
+
+$ pip install -r requirements.txt
+
+python search_synth_ga.py
+
+
+
+

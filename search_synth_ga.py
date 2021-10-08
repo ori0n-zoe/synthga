@@ -7,10 +7,12 @@ from sha3 import keccak_256
 
 item_types = ['WEAPON', 'CHEST', 'HEAD', 'WAIST', 'FOOT', 'HAND', 'NECK', 'RING']
 
-difficulty = 8           # set this to 8 to find a snyth GA for all 8 items
-numworkers = 22
-numiter = int(1e20)      # set this to an infinite number to search forever or a small # to see 
-                         # the rate you search at
+difficulty = 8        # set this to 8 to find a snyth GA for all 8 items
+numworkers = 22       # number of processes to 
+numiter = int(1e20)   # set this to an infinite number to search forever or a small # to see 
+                      # the rate you search at
+
+reportat = int(1e7)   # worker #000 will print to console
 
 logpath = "./found.txt"
 
@@ -32,8 +34,11 @@ def check_addr(addr):
     return True
 
 def worker():
+    name = multiprocessing.current_process().name
     for i in range(numiter):
-        private_key = keccak_256(token_bytes(64)).digest()
+        if i % reportat == 0 and name == '000':
+            print(f'worker {name}: {i*numworkers:,.0f}')
+        private_key = keccak_256(token_bytes(32)).digest()
         public_key = PublicKey.from_valid_secret(private_key).format(compressed=False)[1:]
         addr = keccak_256(public_key).digest()[-20:]
         if(check_addr(addr)):
@@ -51,7 +56,7 @@ if __name__ == '__main__':
     jobs = []
     beg = time.time()
     for i in range(numworkers):
-        p = multiprocessing.Process(target=worker)
+        p = multiprocessing.Process(target=worker, name=str(i).zfill(3))
         jobs.append(p)
         p.start()
     for j in jobs:

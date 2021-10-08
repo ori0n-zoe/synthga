@@ -1,0 +1,2 @@
+coincurve
+pysha3
