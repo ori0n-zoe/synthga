@@ -21,8 +21,7 @@ def check_addr(addr):
     suffix = None
     for item_type in item_types_b[:difficulty]:
         rand = int.from_bytes(keccak_256(item_type+addr).digest(), 'big', signed=False)
-        greatness = rand % 21
-        if greatness > 14:
+        if rand % 21 > 14:
             if suffix is not None:
                 suffix_new = rand % 16 + 1
                 if suffix_new != suffix:
