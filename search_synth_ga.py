@@ -6,6 +6,7 @@ from sha3 import keccak_256
 
 
 item_types = ['WEAPON', 'CHEST', 'HEAD', 'WAIST', 'FOOT', 'HAND', 'NECK', 'RING']
+item_types_b = [bytes(item_type, 'utf-8') for item_type in item_types]
 
 difficulty = 8        # set this to 8 to find a snyth GA for all 8 items
 numworkers = 22       # number of processes to 
@@ -18,9 +19,8 @@ logpath = "./found.txt"
 
 def check_addr(addr):
     suffix = None
-    for item_type in item_types[:difficulty]:
-        b = bytes(item_type, 'utf-8') + addr
-        rand = int.from_bytes(keccak_256(b).digest(), 'big', signed=False)
+    for item_type in item_types_b[:difficulty]:
+        rand = int.from_bytes(keccak_256(item_type+addr).digest(), 'big', signed=False)
         greatness = rand % 21
         if greatness > 14:
             if suffix is not None:
