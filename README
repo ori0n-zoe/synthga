@@ -1,6 +1,15 @@
 
+# On Windows, the coincurve package from pip requires the MS Visual Studio C++ compiler to exist
+# in order to compile the Wheel so as of now the project doesn't support Windows (I use Ubuntu). 
+# 
+# I did get it running on Windows using WSL2 , but the search rate seemed much slower than I expected
+# so I suspect something inefficient is happening when running on WSL2, so I don't recommmend going this
+# route either
+
+# install required packages
 $ pip install -r requirements.txt
 
+# start searching!
 python search_synth_ga.py
 
 
